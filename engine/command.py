@@ -44,7 +44,9 @@ def allCommands():
     # say(userquery)
     print(userquery)
     if "open".lower() in userquery.lower():
-        opencommand(userquery);
+        openCommand(userquery);
+    elif "on youtube":
+        PlayYoutube(userquery);
     else:
         say("Sorry I cant open app")
 

@@ -33,7 +33,6 @@ elif platform.system() == 'Linux':
     browser_command = f'google-chrome --app="http://localhost:{port}/index.html"'
 else:
     raise Exception("Unsupported operating system")
-
 # Start the Eel application
 try:
     # Start the browser with the appropriate command
