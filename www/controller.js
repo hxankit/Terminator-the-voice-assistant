@@ -3,7 +3,7 @@ $(document).ready(function () {
 
 
     // Display Speak Message
-    eel.expose(DisplayMessage)
+    eel.expose(DisplayMessage);
     function DisplayMessage(message) {
 
         $(".siri-message li:first").text(message);
@@ -12,13 +12,13 @@ $(document).ready(function () {
     }
 
     // Display hood
-    eel.expose(ShowHood)
+    eel.expose(ShowHood);
     function ShowHood() {
         $("#Oval").show(); // Hide element
         $("#SiriWave").hide();
     }
 
-    
+
 
 
 });

@@ -1,11 +1,14 @@
 from gtts import gTTS
 from pydub import AudioSegment
 import eel
+from www import *
+import time 
 from pydub.playback import play
-import io
 
+import io
 def say(text, speed=1.35):
-    # eel.DisplayMessage("Listening...")
+    # text = str(text)
+    # eel.DisplayMessage(text)
     # Initialize gTTS object with the given text and language
     tts = gTTS(text, lang='en', slow=False)  # Set 'slow' to False to use the default speed
 

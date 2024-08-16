@@ -29,86 +29,6 @@ def playassistantsound():
         pygame.time.Clock().tick(10)
 
 
-# playassistantsound()
-
-
-def PlayYoutube(search_term):
-    # Check if search_term is None
-    if search_term is None:
-        # Handle the case when search_term is None
-        say("No search term provided.")
-        return
-
-    # Proceed with normal functionality if search_term is valid
-    say("Playing " + search_term + " on YouTube")
-
-
-
-
-
-def openCommand(userquery):
-    # say("welcome in open")
-    userquery = userquery.replace(Assistantname, "")
-    userquery = userquery.replace("open", "")
-    userquery = userquery.strip().lower()
-
-    app_name = userquery
-
-    if app_name != "":
-        try:
-            cursor.execute(
-                'SELECT path FROM sys_command WHERE name = ?', (app_name,))
-            results = cursor.fetchall()
-
-            if len(results) != 0:
-                say("Opening " + userquery)
-                print(results[0][0])
-                file_path = results[0][0]
-                try:
-                    subprocess.run(['xdg-open', file_path], check=True)
-                except subprocess.CalledProcessError as e:
-                    print(f"Error opening file: {e}")
-
-            else:
-                cursor.execute(
-                    'SELECT url FROM web_command WHERE name = ?', (app_name,))
-                results = cursor.fetchall()
-
-                if len(results) != 0:
-                    url = results[0][0]
-                    say("Opening " + userquery)
-                    try:
-                        print(f"Attempting to open URL: {url}")  # Debugging line
-                        webbrowser.get('firefox').open(url)
-                    except Exception as e:
-                        print(f"Error opening URL: {e}")
-
-                else:
-                    say("Could not find the application or file. Attempting to open with subprocess.")
-                    try:
-                        subprocess.run(userquery, shell=True, check=True)
-                    except subprocess.CalledProcessError as e:
-                        say(f"Error opening application: {e}")
-
-        except Exception as e:
-            say(f"Something went wrong: {e}")
-
-def PlayYoutube(userquery):
-    # Extract the search term from the user query
-    search_term = extract_yt_term(userquery)
-    print(search_term)
-    
-    # Check if the search term is None or an empty string
-   
-    say("Playing " + search_term + " on YouTube")
-    
-    # Play the video on YouTube
-    kit.playonyt(search_term)
-
-
-
-
-
 
 def hotword():
     porcupine = None
@@ -156,7 +76,7 @@ def hotword():
                         print(f"Error with xte command: {e}")
                     except Exception as e:
                         print(f"Unexpected error: {e}")
-                    time.sleep(2)
+                    time.sleep(3)
             
             except IOError as e:
                 print(f"Audio error: {e}")
@@ -175,3 +95,61 @@ def hotword():
             audio_stream.close()
         if paud is not None:
             paud.terminate()
+
+
+def openCommand(userquery):
+    # say("welcome in open")
+    userquery = userquery.replace(Assistantname, "")
+    userquery = userquery.replace("open", "")
+    userquery = userquery.strip().lower()
+
+    app_name = userquery
+
+    if app_name != "":
+        try:
+            cursor.execute(
+                'SELECT path FROM sys_command WHERE name = ?', (app_name,))
+            results = cursor.fetchall()
+
+            if len(results) != 0:
+                
+                say("Opening " + userquery)
+                print(results[0][0])
+                file_path = results[0][0]
+                try:
+                    subprocess.run(['xdg-open', file_path], check=True)
+                except subprocess.CalledProcessError as e:
+                    print(f"Error opening file: {e}")
+
+            else:
+                cursor.execute(
+                    'SELECT url FROM web_command WHERE name = ?', (app_name,))
+                results = cursor.fetchall()
+
+                if len(results) != 0:
+                    url = results[0][0]
+                    
+                    say("Opening " + userquery)
+                    try:
+                        print(f"Attempting to open URL: {url}")  # Debugging line
+                        webbrowser.get('firefox').open(url)
+                    except Exception as e:
+                        print(f"Error opening URL: {e}")
+
+                else:
+                    
+                    say("Could not find the application or file. Attempting to open with subprocess.")
+                    try:
+                        subprocess.run(userquery, shell=True, check=True)
+                    except subprocess.CalledProcessError as e:
+                        say(f"Error opening application: {e}")
+
+        except Exception as e:
+            say(f"Something went wrong: {e}")
+            eel.DisplayMessage(f"Something went wrong: {e}")
+
+def playYtCommand(userquery):
+    search_term= userquery.replace("play", "").replace("on youtube", "").strip()
+    say(f"playing {search_term} on youtube")
+    eel.DisplayMessage(f"playing {search_term} on youtube")
+    kit.playonyt(search_term)

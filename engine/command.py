@@ -9,7 +9,7 @@ import time
 
 
 
-
+manual_query ="play chandigrah song on youtube"
 
 
 
@@ -24,11 +24,13 @@ def take_command():
         # Adjust for ambient noise if needed
         r.adjust_for_ambient_noise(source)
         try:
+
             audio = r.listen(source, timeout=8, phrase_time_limit=6)
             print("Recognizing...")
             eel.DisplayMessage("Recognizing...")
             query = r.recognize_google(audio, language="en-in")
             print(f"User said: {query}")
+
             # Optionally, you can perform further processing on the query here
             return query.lower()
         except sr.UnknownValueError:
@@ -45,22 +47,32 @@ def take_command():
             return ""  # Return empty string for any other exceptions
 
 @eel.expose
-def allCommands():
+def allCommands(message=1):
+    if message == 1:
+        userquery=take_command()
     
-    userquery=take_command()
-    
-    # say(userquery)
-    print(f'this is a query {userquery}')
-
-    if "open".lower() in userquery.lower():
-        print("Open comaand fired")
-        openCommand(userquery);
-    elif "play":
-        print("Open youtube fired")
-        PlayYoutube(userquery);
+        print(userquery)
     else:
-        say("Sorry I cant open app")
+        userquery= message
+
+    
+    
+    if userquery != "":
+            
+        print(f'this is a query {userquery}')
+
+        if "open".lower() in userquery.lower():
+            print("Open comaand fired")
+            openCommand(userquery);
+        elif "play":
+            playYtCommand(userquery)
+        else:
+            say("Sorry I cant open app")
 
 
 
+    else:
+        eel.ShowHood()
+    
     eel.ShowHood()
+        
