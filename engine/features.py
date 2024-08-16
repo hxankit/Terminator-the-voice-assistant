@@ -32,17 +32,22 @@ def playassistantsound():
 # playassistantsound()
 
 
-def PlayYoutube(userquery):
-    search_term = extract_yt_term(userquery)
-    print("Playing "+search_term+" on YouTube")
-    kit.playonyt(search_term)
+def PlayYoutube(search_term):
+    # Check if search_term is None
+    if search_term is None:
+        # Handle the case when search_term is None
+        say("No search term provided.")
+        return
 
+    # Proceed with normal functionality if search_term is valid
+    say("Playing " + search_term + " on YouTube")
 
 
 
 
 
 def openCommand(userquery):
+    # say("welcome in open")
     userquery = userquery.replace(Assistantname, "")
     userquery = userquery.replace("open", "")
     userquery = userquery.strip().lower()
@@ -56,7 +61,7 @@ def openCommand(userquery):
             results = cursor.fetchall()
 
             if len(results) != 0:
-                print("Opening " + userquery)
+                say("Opening " + userquery)
                 print(results[0][0])
                 file_path = results[0][0]
                 try:
@@ -71,7 +76,7 @@ def openCommand(userquery):
 
                 if len(results) != 0:
                     url = results[0][0]
-                    print("Opening " + userquery)
+                    say("Opening " + userquery)
                     try:
                         print(f"Attempting to open URL: {url}")  # Debugging line
                         webbrowser.get('firefox').open(url)
@@ -79,25 +84,23 @@ def openCommand(userquery):
                         print(f"Error opening URL: {e}")
 
                 else:
-                    print("Could not find the application or file. Attempting to open with subprocess.")
+                    say("Could not find the application or file. Attempting to open with subprocess.")
                     try:
                         subprocess.run(userquery, shell=True, check=True)
                     except subprocess.CalledProcessError as e:
-                        print(f"Error opening application: {e}")
+                        say(f"Error opening application: {e}")
 
         except Exception as e:
-            print(f"Something went wrong: {e}")
+            say(f"Something went wrong: {e}")
 
 def PlayYoutube(userquery):
     # Extract the search term from the user query
     search_term = extract_yt_term(userquery)
+    print(search_term)
     
     # Check if the search term is None or an empty string
-    if not search_term:
-        search_term = "default search term"  # Use a default value or handle the error as needed
-        print("No search term provided. Playing default video on YouTube.")
-    else:
-        print("Playing " + search_term + " on YouTube")
+   
+    say("Playing " + search_term + " on YouTube")
     
     # Play the video on YouTube
     kit.playonyt(search_term)
@@ -140,12 +143,13 @@ def hotword():
                 if keyword_index >= 0:
 
                     print("Hotword detected!")
+                    # say("Hotword detected!")
                     print(keyword_index)
                     print(keyword)
                     # Simulate pressing the Super (Windows) key and 'j'
                     try:
                      # Simulate pressing the Super (Windows) key and 'j'
-                        time.sleep(3)  # Wait for 2 seconds
+                        # time.sleep(3)  # Wait for 2 seconds
                         subprocess.run(['xte', 'keydown Super_L', 'key j', 'keyup Super_L'], check=True)
                         print("Key press simulated successfully.")
                     except subprocess.CalledProcessError as e:

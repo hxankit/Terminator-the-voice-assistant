@@ -13,28 +13,36 @@ import time
 
 
 
+import speech_recognition as sr
+
 def take_command():
-    global current_language  
+    global current_language
     r = sr.Recognizer()
     with sr.Microphone() as source:
-        # r.adjust_for_ambient_noise(source)  # Adjust for ambient noise
         print("Listening...")
         eel.DisplayMessage("Listening...")
-        # eel.ShowHood()
-        audio = r.listen(source,8,6)
-
+        # Adjust for ambient noise if needed
+        r.adjust_for_ambient_noise(source)
         try:
+            audio = r.listen(source, timeout=8, phrase_time_limit=6)
             print("Recognizing...")
             eel.DisplayMessage("Recognizing...")
-            query = r.recognize_google(audio, language=current_language)
+            query = r.recognize_google(audio, language="en-in")
             print(f"User said: {query}")
-            
-            time.sleep(3)
-            # say(query)
+            # Optionally, you can perform further processing on the query here
             return query.lower()
+        except sr.UnknownValueError:
+            print("Sorry, I did not understand the audio.")
+            eel.DisplayMessage("Sorry, I did not understand the audio.")
+            return ""  # Return empty string if speech could not be understood
+        except sr.RequestError:
+            print("Sorry, there was an error with the speech recognition service.")
+            eel.DisplayMessage("Sorry, there was an error with the speech recognition service.")
+            return ""  # Return empty string if there was a request error
         except Exception as e:
-            return ""
-        return query.lower()
+            print(f"An error occurred: {e}")
+            eel.DisplayMessage(f"An error occurred: {e}")
+            return ""  # Return empty string for any other exceptions
 
 @eel.expose
 def allCommands():
@@ -42,10 +50,13 @@ def allCommands():
     userquery=take_command()
     
     # say(userquery)
-    print(userquery)
+    print(f'this is a query {userquery}')
+
     if "open".lower() in userquery.lower():
+        print("Open comaand fired")
         openCommand(userquery);
-    elif "on youtube":
+    elif "play":
+        print("Open youtube fired")
         PlayYoutube(userquery);
     else:
         say("Sorry I cant open app")

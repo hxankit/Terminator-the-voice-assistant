@@ -1,0 +1,6 @@
+pvporcupine==1.9.5  
+eel
+xdotool
+numpy
+enum
+google.cloud
